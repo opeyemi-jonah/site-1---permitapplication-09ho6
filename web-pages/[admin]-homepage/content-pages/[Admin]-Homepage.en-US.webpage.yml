@@ -1,0 +1,18 @@
+adx_displayorder: 10
+adx_enablerating: false
+adx_enabletracking: false
+adx_entitylist: f51160d1-f47d-f011-b4cc-7c1e52476cc1
+adx_excludefromsearch: false
+adx_feedbackpolicy: 756150000
+adx_hiddenfromsitemap: false
+adx_isroot: false
+adx_name: '[Admin] Homepage'
+adx_pagetemplateid: 24d05ad7-f47d-f011-b4cc-7c1e52476cc1
+adx_parentpageid: d7cf5ad7-f47d-f011-b4cc-7c1e52476cc1
+adx_partialurl: admin-home
+adx_publishingstateid: 241260d1-f47d-f011-b4cc-7c1e52476cc1
+adx_rootwebpageid: ce1160d1-f47d-f011-b4cc-7c1e52476cc1
+adx_sharedpageconfiguration: true
+adx_title: '[Admin] Homepage'
+adx_webpageid: e61160d1-f47d-f011-b4cc-7c1e52476cc1
+adx_webpagelanguageid: 439b5cdd-f47d-f011-b4cc-7c1e52476cc1

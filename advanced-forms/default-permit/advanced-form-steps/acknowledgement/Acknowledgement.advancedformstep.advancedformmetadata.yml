@@ -1,0 +1,42 @@
+- adx_adddescription: false
+  adx_attributelogicalname: bp_initials
+  adx_description: >-
+    [
+      {
+        "LCID": 1033,
+        "Value": ""
+      }
+    ]
+  adx_descriptionposition: 100000000
+  adx_fieldisrequired: true
+  adx_ignoredefaultvalue: false
+  adx_label: >-
+    [
+      {
+        "LCID": 1033,
+        "Value": "Initials"
+      }
+    ]
+  adx_purchasecreateinvoiceonpayment: false
+  adx_purchasefulfillorderonpayment: false
+  adx_purchaserequiresshipping: false
+  adx_randomizeoptionsetvalues: false
+  adx_requiredfieldvalidationerrormessage: >-
+    [
+      {
+        "LCID": 1033,
+        "Value": ""
+      }
+    ]
+  adx_setvalueonsave: false
+  adx_type: 100000000
+  adx_useattributedescriptionproperty: false
+  adx_validationregularexpressionerrormessage: >-
+    [
+      {
+        "LCID": 1033,
+        "Value": ""
+      }
+    ]
+  adx_webformmetadataid: 3f9b5cdd-f47d-f011-b4cc-7c1e52476cc1
+  adx_webformstep: 09d05ad7-f47d-f011-b4cc-7c1e52476cc1

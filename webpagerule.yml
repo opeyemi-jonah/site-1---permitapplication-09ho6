@@ -1,0 +1,28 @@
+- adx_name: Grant Change to Administrators
+  adx_right: 1
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 071260d1-f47d-f011-b4cc-7c1e52476cc1
+  adx_webpageaccesscontrolruleid: 16d05ad7-f47d-f011-b4cc-7c1e52476cc1
+  adx_webpageid: d7cf5ad7-f47d-f011-b4cc-7c1e52476cc1
+- adx_name: Grant Change to Content
+  adx_right: 1
+  adx_scope: 1
+  adx_webpageaccesscontrolruleid: 18d05ad7-f47d-f011-b4cc-7c1e52476cc1
+- adx_name: '[Building Permit] Admin Home'
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - f71160d1-f47d-f011-b4cc-7c1e52476cc1
+  adx_webpageaccesscontrolruleid: 1cd05ad7-f47d-f011-b4cc-7c1e52476cc1
+  adx_webpageid: ce1160d1-f47d-f011-b4cc-7c1e52476cc1
+- adx_name: Permit Permission
+  adx_right: 1
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - fd1160d1-f47d-f011-b4cc-7c1e52476cc1
+  adx_webpageaccesscontrolruleid: 359b5cdd-f47d-f011-b4cc-7c1e52476cc1
+- adx_name: Authenticated
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolruleid: ef1160d1-f47d-f011-b4cc-7c1e52476cc1
