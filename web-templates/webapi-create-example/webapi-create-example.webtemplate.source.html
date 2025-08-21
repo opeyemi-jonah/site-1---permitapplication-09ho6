@@ -583,6 +583,7 @@
         });
 
         /* ---------- Submit to Dataverse ---------- */
+        
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             if (!validateStep(currentStep)) return;
@@ -611,15 +612,14 @@
                 new_termsaccepted: (document.querySelector('input[name="new_termsaccepted"]:checked') || {}).value || null,
                 new_initials: $('#new_initials').value.trim()
             };
-            console.log("Submitting record:", record);
 
             // Disable submit to prevent double posts
-            // submitBtn.disabled = true; submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true; submitBtn.textContent = 'Submitting...';
 
             // 🔁 POST the main record
-          /**  webapi.safeAjax({
+            webapi.safeAjax({
                 type: "POST",
-                url: "/_api/nrc_permit_devs", // table logical name
+                url: "/_api/cre6c_nrc_permit_devs", // Entity set name
                 contentType: "application/json",
                 data: JSON.stringify(record),
                 success: function (data, textStatus, xhr) {
@@ -643,7 +643,7 @@
                             mimetype: file.type || "application/octet-stream",
                             documentbody: base64,
                             // Bind note to the created record (replace the navigation property below)
-                            "objectid_nrc_permit_dev@odata.bind": `/nrc_permit_devs(${newId})`
+                            "objectid_nrc_permit_dev@odata.bind": `/cre6c_nrc_permit_devs(${newId})`
                         };
 
                         webapi.safeAjax({
@@ -664,7 +664,6 @@
                     alert("There was an error creating the record. Please try again.");
                 }
             });
-            **/
 
             function done(success, message) {
                 submitBtn.disabled = false; submitBtn.textContent = 'Submit';

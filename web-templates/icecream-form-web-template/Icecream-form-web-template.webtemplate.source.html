@@ -1,0 +1,164 @@
+
+<script type="text/javascript">
+    
+    // === Entity info ===
+    const entitySetName = "cre6c_icecreams";      // used for POST (plural)
+    const entityLogicalName = "cre6c_icecream";   // used for metadata fetch (singular)
+    const flavorColumn = "cre6c_flavor";          // multi-select
+    const coneBowlColumn = "cre6c_conebowl";      // single-select
+    const termsAcceptedColumn = "cre6c_termsaccepted"; // radio button
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        // Flavors (multi-select)
+        const flavors = {
+            564980001: "Vanilla",
+            564980002: "Chocolate",
+            564980003: "Peanut Butter",
+            564980004: "Mint Chocolate Chip",
+        };
+        const flavorSelect = document.getElementById("flavor");
+        Object.entries(flavors).forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.text = label;
+            flavorSelect.appendChild(option);
+        });
+
+        // Bowl/Cone (single-select)
+        const coneBowlOptions = {
+            564980000: "Regular Cone",
+            564980001: "Sugar Cone",
+            564980002: "Waffle Bowl",
+            564980003: "Paper Bowl",
+        };
+        const coneBowlSelect = document.getElementById("coneBowl");
+        Object.entries(coneBowlOptions).forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.text = label;
+            coneBowlSelect.appendChild(option);
+        });
+    });
+
+    // === Form submission handling ===
+    // Get the form element
+    const myForm = document.getElementById('icecreamForm');
+
+    // Add an event listener for the 'submit' event
+
+    myForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Collect form data
+        const customerName = document.getElementById('customerName').value.trim();
+        const customerPhone = document.getElementById('customerPhone').value.trim();
+        const flavors = Array.from(document.getElementById('flavor').selectedOptions).map(opt => opt.value).join(',');
+        const termsAccepted = document.querySelector('input[name="termsAccepted"]:checked');
+        const coneBowl = parseInt(document.getElementById('coneBowl').value);
+
+        const payload = {
+            cre6c_customername: customerName,
+            cre6c_customerphone: customerPhone,
+            cre6c_flavor: flavors,
+            cre6c_termsaccepted: termsAccepted ? (termsAccepted.value === 'Yes') : null,
+            cre6c_conebowl: coneBowl
+        };
+        // Example: Perform client-side validation, send data via AJAX, etc.
+    });
+
+
+</script>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Ice Cream Order Form</h3>
+                </div>
+                <div class="card-body">
+                    {% include 'portalwebapihelper' %}
+                    <form id="icecreamForm" novalidate>
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="customerName" required>
+                            <div id="err_customerName" class="error"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label">Customer Phone</label>
+                            <input type="tel" class="form-control" id="customerPhone" required>
+                            <div id="err_customerPhone" class="error"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="flavor" class="form-label">Flavors</label>
+                            <select multiple class="form-select" id="flavor" required></select>
+                            <div id="err_flavor" class="error"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Terms Accepted</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="termsAccepted" id="termsYes"
+                                    value="Yes" required>
+                                <label class="form-check-label" for="termsYes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="termsAccepted" id="termsNo"
+                                    value="No">
+                                <label class="form-check-label" for="termsNo">No</label>
+                            </div>
+                            <div id="err_termsAccepted" class="error"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="coneBowl" class="form-label">Bowl/Cone</label>
+                            <select class="form-select" id="coneBowl" required></select>
+                            <div id="err_coneBowl" class="error"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-success" onclick="checkForm()">Check</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+        function checkForm() {
+        const customerName = document.getElementById('customerName').value.trim();
+        const customerPhone = document.getElementById('customerPhone').value.trim();
+        const flavors = Array.from(document.getElementById('flavor').selectedOptions)
+            .map(opt => parseInt(opt.value)).join(',');
+        const termsAccepted = document.querySelector('input[name="termsAccepted"]:checked');
+        const coneBowl = parseInt(document.getElementById('coneBowl').value);
+
+        const payload = {
+            cre6c_customername: customerName,
+            cre6c_customerphone: customerPhone,
+            cre6c_flavor: flavors,
+            cre6c_termsaccepted: termsAccepted ? (termsAccepted.value === 'Yes') : null,
+            cre6c_conebowl: coneBowl
+        };
+
+        webapi.safeAjax({
+            url: "/_api/cre6c_icecreams",
+            type: "POST",
+            data: JSON.stringify(payload),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, textStatus, xhr) {
+                const newID = xhr.getResponseHeader("entityid");
+                $('#icecreamForm')[0].reset();
+                console.log("New record created:", newID);
+                alert("Order submitted successfully!");
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error("Submission error:", textStatus, errorThrown, xhr.responseText);
+                alert("Something went wrong. Please try again.");
+            }
+        });
+
+        console.log('Payload:', payload);
+    }
+
+</script>
