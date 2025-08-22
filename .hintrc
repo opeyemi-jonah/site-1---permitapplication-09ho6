@@ -6,9 +6,9 @@
     "axe/aria": [
       "default",
       {
-        "aria-required-children": "off",
-        "aria-required-parent": "off",
-        "aria-valid-attr-value": "off"
+        "aria-required-children": "on",
+        "aria-required-parent": "on",
+        "aria-valid-attr-value": "on"
       }
     ],
     "axe/structure": [
