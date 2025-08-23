@@ -568,7 +568,7 @@
         // Replace with your Power Automate flow URL
         //TODO: place url in a secure location (e.g., environment variable)
         const FLOW_GEO_URL = "https://prod-137.westus.logic.azure.com:443/workflows/2c0a2c10de1f40ff8af5584929aa70c7/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=0jf2MWWx2DppTvJxqePK_d5Y6HZmZkVagfUhQaFpyk0";
-        
+
         // ----- FLOW HELPERS -----
         async function reverseGeocode(lat, lon) {
             try {
@@ -656,7 +656,6 @@
             }
         });
 
-
         /* ---------- Submit to Dataverse ---------- */
         form.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -690,13 +689,14 @@
                 cre6c_experiencequalifications: $('#cre6c_experiencequalifications').value.trim(),
                 cre6c_termsaccepted: terms_accepted ? 'Yes' : 'No',
                 // cre6c_termsaccepted: terms_accepted ? (terms_accepted.value === 'Yes') : false,
-                cre6c_initials: $('#cre6c_initials').value.trim()
+                cre6c_initials: $('#cre6c_initials').value.trim(),
+                cre6c_fileupload_name: $('#cre6c_fileupload').files[0] ? encodeURIComponent($('#cre6c_fileupload').files[0].name) : null
             };
 
             // Disable submit to prevent double posts
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-            console.log("Submitting record:", record);
+
             // Step 1: Create main record
             webapi.safeAjax({
                 type: "POST",
@@ -705,7 +705,7 @@
                 data: JSON.stringify(record),
                 success: function (data, textStatus, xhr) {
                     const newId = xhr.getResponseHeader("entityid");
-                    const fileInput = $('#cre6c_fileupload');
+                    getFileContentsAndMetadata(newId);
                     done(true, "Record created successfully!");
                 },
                 error: function (xhr) {
@@ -715,6 +715,53 @@
                     alert("There was an error creating the record. Please try again.");
                 }
             });
+
+
+            function getFileContentsAndMetadata(entityID) {
+                console.log("New record ID:", entityID);
+                console.log("Getting file contents...");
+                // Get the name of the selected file
+                var fileName = encodeURIComponent(document.getElementById('cre6c_fileupload').files[0].name);
+                // Get the content of the selected file
+                var file = document.getElementById('cre6c_fileupload').files[0];
+                // If the user has selected a file
+                if (file) {
+                    // Read the file as a byte array
+                    var reader = new FileReader();
+                    reader.readAsArrayBuffer(file);
+                    // The browser has finished reading the file, we can now do something with it...
+                    reader.onload = function (e) {
+                        // The browser has finished reading the file, we can now do something with it...
+                        var fileContent = new Uint8Array(e.target.result);
+   
+                        // Run the function to upload to the Portal Web API, passing the GUID of the newly created record and the file's contents and name as inputs
+                        uploadFile(fileContent, fileName, entityID);
+                    };
+                }
+            }
+
+            // Upload the file to
+            function uploadFile(fileContent, fileName, newID) {
+                console.log("Uploading file to record ID:", newID);
+                console.log("File COntent", fileContent);
+
+                // Use the safeAjax function to call the Portal Web API to upload the file as a note attachment
+                webapi.safeAjax({
+                    type: "PATCH",
+                    url: "/_api/cre6c_nrc_permit_devs(" + newID + ")/cre6c_fileupload?x-ms-file-name=" + fileName,
+                    contentType: "application/octet-stream",
+                    data: fileContent,
+                    processData: false,
+                    success: function (data, textStatus, xhr) {
+                        done(true, "Record and file created successfully!");
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // If error occurs uploading the file, provide visual feedback
+                        done(false, "Record created but there was an error uploading the file.");
+                        console.error('Error uploading file:', errorThrown);
+                    }
+                });
+            }
 
             function done(success, message) {
                 submitBtn.disabled = false;
@@ -734,6 +781,8 @@
                 }
             }
         });
+
+
 
         // Initialize first step view
         showStep(currentStep);
