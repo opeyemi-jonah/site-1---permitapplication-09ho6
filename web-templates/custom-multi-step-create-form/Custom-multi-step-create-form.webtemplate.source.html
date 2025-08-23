@@ -1,13 +1,86 @@
 {% include 'portalwebapihelper' %}
 
+<style>
+    /* Steps */
+    .form-step {
+        display: none;
+    }
+
+    .form-step.active {
+        display: block;
+    }
+
+    .error {
+        color: #dc3545;
+        font-size: 0.9em;
+        margin-top: .25rem;
+        min-height: 1em;
+    }
+
+    /* Map */
+    #map {
+        height: 400px;
+        border-radius: .375rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+    }
+
+    /* Tabs */
+    .form-nav-tabs .nav-link {
+        cursor: pointer;
+    }
+
+    .form-nav-tabs .nav-link.disabled {
+        color: #6c757d !important;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    /* Suggestion dropdown */
+    .positioner {
+        position: relative;
+    }
+
+    .suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+        border: 1px solid #ccc;
+        background: #fff;
+        max-height: 260px;
+        overflow: auto;
+        border-radius: .375rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    }
+
+    .suggestions div {
+        padding: .5rem .75rem;
+        cursor: pointer;
+    }
+
+    .suggestions div:hover {
+        background: #f6f7f9;
+    }
+
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+        white-space: nowrap;
+    }
+</style>
+
 <script>
 
     document.addEventListener("DOMContentLoaded", async function () {
         const today = new Date().toISOString().split('T')[0];
         const tomorrow = new Date(Date.now() + 864e5).toISOString().split('T')[0];
 
-        document.getElementById("cre6c_projectstartdate").setAttribute('min', today);
-        document.getElementById("cre6c_projectenddate").setAttribute('min', tomorrow);
+        document.getElementById("cre6c_projectedstartdate").setAttribute('min', today);
+        document.getElementById("cre6c_projectedenddate").setAttribute('min', tomorrow);
 
 
         // Plant Design (single-select)
@@ -41,15 +114,11 @@
 </script>
 
 <div class="bg-light">
-    <main class="">
+    <main class="container py-5">
         <div class="p-5 mb-4 bg-white rounded-3 shadow">
-            <div class="bg-primary mb-4 p-2">
-                <h1 class="fs-2 text-white text-center mb-2 ">Environmental Review Application</h1>
-                <p class="text-center text-white fs-6 mb-4">Complete all required fields to submit your application for
-                    environmental review</p>
-            </div>
+            <h1 class="display-5 fw-bold text-center mb-4">Application Form</h1>
 
-            <form id="multiStepForm" class="p-5" novalidate>
+            <form id="multiStepForm" novalidate>
                 <!-- Tab Navigation for the Steps -->
                 <ul class="nav nav-tabs form-nav-tabs mb-4" id="formTabs" role="tablist">
                     <li class="nav-item">
@@ -168,7 +237,7 @@
 
                         <div class="col-12">
                             <label for="cre6c_reactormodel" class="form-label">Reactor Model</label>
-                            <input type="text" class="form-control" id="cre6c_refactormodel">
+                            <input type="text" class="form-control" id="cre6c_reactormodel">
                         </div>
                         <div class="col-12">
                             <label for="cre6c_operatinghistory" class="form-label">Operating History</label>
@@ -182,13 +251,13 @@
                     <h3 class="mb-4">Schedule & Scope</h3>
                     <div class="row g-3">
                         <div class="col-12 col-md-4">
-                            <label for="cre6c_projectstartdate" class="form-label">Project Start Date</label>
-                            <input type="date" class="form-control" id="cre6c_projectstartdate" required>
+                            <label for="cre6c_projectedstartdate" class="form-label">Project Start Date</label>
+                            <input type="date" class="form-control" id="cre6c_projectedstartdate" required>
                             <div id="err_startdate" class="error"></div>
                         </div>
                         <div class="col-12 col-md-4">
-                            <label for="cre6c_projectenddate" class="form-label">Project End Date</label>
-                            <input type="date" class="form-control" id="cre6c_projectenddate" required>
+                            <label for="cre6c_projectedenddate" class="form-label">Project End Date</label>
+                            <input type="date" class="form-control" id="cre6c_projectedenddate" required>
                             <div id="err_enddate" class="error"></div>
                         </div>
                         <div class="col-12">
@@ -283,7 +352,7 @@
                         <hr class="my-4">
 
                         <h4 class="mb-3">Schedule & Scope</h4>
-                        <p><strong>Project Start Date:</strong> <span id="confirm_projectstartdate"></span></p>
+                        <p><strong>Project Start Date:</strong> <span id="confirm_projectedstartdate"></span></p>
                         <p><strong>Project End Date:</strong> <span id="confirm_projectenddate"></span></p>
                         <p><strong>Modification Description:</strong> <span id="confirm_modificationdescription"></span>
                         </p>
@@ -320,11 +389,11 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         /*---------Setup project end date range----------*/
-        const startDateInput = document.getElementById('cre6c_projectstartdate');
+        const startDateInput = document.getElementById('cre6c_projectedstartdate');
 
         startDateInput.addEventListener('change', function () {
             const startDate = this.value;
-            const endDateInput = document.getElementById('cre6c_projectenddate');
+            const endDateInput = document.getElementById('cre6c_projectedenddate');
             if (startDate) {
                 endDateInput.min = startDate;
                 if (endDateInput.value && endDateInput.value < startDate) {
@@ -439,8 +508,8 @@
 
             // Additional rules on Schedule (step 2)
             if (stepIndex === 2) {
-                const start = $('#cre6c_projectstartdate').value;
-                const end = $('#cre6c_projectenddate').value;
+                const start = $('#cre6c_projectedstartdate').value;
+                const end = $('#cre6c_projectedenddate').value;
                 if (start && end && new Date(end) < new Date(start)) {
                     valid = false;
                     setErr('err_enddate', 'End date must be the same or after Start date.');
@@ -470,7 +539,7 @@
                 'cre6c_applicantname', 'cre6c_applicantemail', 'cre6c_applicantphone',
                 'cre6c_primarycontactname', 'cre6c_primarycontactemail', 'cre6c_primarycontactphone',
                 'cre6c_organizationstructure', 'cre6c_plantname', 'cre6c_location', 'cre6c_latitude', 'cre6c_longitude',
-                'cre6c_plantdesign', 'cre6c_refactormodel', 'cre6c_operatinghistory', 'cre6c_projectstartdate', 'cre6c_projectenddate',
+                'cre6c_plantdesign', 'cre6c_reactormodel', 'cre6c_operatinghistory', 'cre6c_projectedstartdate', 'cre6c_projectedenddate',
                 'cre6c_modificationdescription', 'cre6c_financialassurance', 'cre6c_experiencequalifications', 'cre6c_initials'
             ];
             ids.forEach(id => {
@@ -496,8 +565,6 @@
         }
 
         // Reverse geocode helper (for map clicks)
-        // Replace with your Power Automate flow URLkb
-        //TODO: place url in a secure location (e.g., environment variable)
         const FLOW_GEO_URL = "https://prod-137.westus.logic.azure.com:443/workflows/2c0a2c10de1f40ff8af5584929aa70c7/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=0jf2MWWx2DppTvJxqePK_d5Y6HZmZkVagfUhQaFpyk0";
 
         // ----- FLOW HELPERS -----
@@ -593,13 +660,13 @@
             if (!validateStep(currentStep)) return;
 
             const terms_accepted = document.querySelector('input[name="cre6c_termsaccepted"]:checked');
-            const refactor_model = document.getElementById('cre6c_refactormodel').value.trim();
+            const refactor_model = document.getElementById('cre6c_reactormodel').value.trim();
             const plant_design = parseInt($('#cre6c_plantdesign').value);
             const financial_assurance = parseInt($('#cre6c_financialassurance').value);
 
             // Collect all values from the form
             const record = {
-                cre6c_name: $('#cre6c_applicantname').value.trim(),
+                cre6c_applicantname: $('#cre6c_applicantname').value.trim(),
                 cre6c_applicantemail: $('#cre6c_applicantemail').value.trim(),
                 cre6c_applicantphone: $('#cre6c_applicantphone').value.trim(),
                 cre6c_primarycontactname: $('#cre6c_primarycontactname').value.trim(),
@@ -611,15 +678,14 @@
                 cre6c_latitude: $('#cre6c_latitude').value.trim(),
                 cre6c_longitude: $('#cre6c_longitude').value.trim(),
                 cre6c_plantdesign: plant_design || null,
-                cre6c_refactormodel: refactor_model,
+                cre6c_reactormodel: refactor_model,
                 cre6c_operatinghistory: $('#cre6c_operatinghistory').value.trim(),
-                cre6c_projectstartdate: $('#cre6c_projectstartdate').value || null,
-                cre6c_projectenddate: $('#cre6c_projectenddate').value || null,
+                cre6c_projectedstartdate: $('#cre6c_projectedstartdate').value || null,
+                cre6c_projectedenddate: $('#cre6c_projectedenddate').value || null,
                 cre6c_modificationdescription: $('#cre6c_modificationdescription').value.trim(),
                 cre6c_financialassurance: financial_assurance || null,
                 cre6c_experiencequalifications: $('#cre6c_experiencequalifications').value.trim(),
-                cre6c_termsaccepted: terms_accepted ? 'Yes' : 'No',
-                // cre6c_termsaccepted: terms_accepted ? (terms_accepted.value === 'Yes') : false,
+                cre6c_termsaccepted: terms_accepted ? (terms_accepted.value === 'Yes') : false,
                 cre6c_initials: $('#cre6c_initials').value.trim(),
                 cre6c_fileupload_name: $('#cre6c_fileupload').files[0] ? encodeURIComponent($('#cre6c_fileupload').files[0].name) : null
             };
@@ -631,7 +697,7 @@
             // Step 1: Create main record
             webapi.safeAjax({
                 type: "POST",
-                url: "/_api/cre6c_nrc_permit_devs", // entity set
+                url: "/_api/cre6c_nrc_permits_tables", // entity set
                 contentType: "application/json",
                 data: JSON.stringify(record),
                 success: function (data, textStatus, xhr) {
@@ -664,7 +730,7 @@
                     reader.onload = function (e) {
                         // The browser has finished reading the file, we can now do something with it...
                         var fileContent = new Uint8Array(e.target.result);
-
+   
                         // Run the function to upload to the Portal Web API, passing the GUID of the newly created record and the file's contents and name as inputs
                         uploadFile(fileContent, fileName, entityID);
                     };
@@ -679,7 +745,7 @@
                 // Use the safeAjax function to call the Portal Web API to upload the file as a note attachment
                 webapi.safeAjax({
                     type: "PATCH",
-                    url: "/_api/cre6c_nrc_permit_devs(" + newID + ")/cre6c_fileupload?x-ms-file-name=" + fileName,
+                    url: "/_api/cre6c_nrc_permits_tables(" + newID + ")/cre6c_fileupload?x-ms-file-name=" + fileName,
                     contentType: "application/octet-stream",
                     data: fileContent,
                     processData: false,
