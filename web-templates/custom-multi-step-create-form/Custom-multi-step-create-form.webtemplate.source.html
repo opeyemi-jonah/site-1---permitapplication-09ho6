@@ -82,12 +82,11 @@
         document.getElementById("cre6c_projectedstartdate").setAttribute('min', today);
         document.getElementById("cre6c_projectedenddate").setAttribute('min', tomorrow);
 
-
         // Plant Design (single-select)
         const plant_design_options = {
-            564980000: "Plant Design 1",
-            564980001: "Plant Design 2",
-            564980002: "Plant Design 3",
+            564980000: "Light-Water Reactor (LWR)",
+            564980001: "Pressurized Water Reactor (PWR)",
+            564980002: "Boiling Water Reactor (BWR)",
         };
         const plant_designs_select = document.getElementById("cre6c_plantdesign");
         Object.entries(plant_design_options).forEach(([value, label]) => {
@@ -99,9 +98,8 @@
 
         // Financial Assurance (single-select)
         const financial_assurance_options = {
-            564980000: "Assurance 1",
-            564980001: "Assurance 2",
-            564980002: "Assurance 3",
+            564980000: "Self-Assurance",
+            564980001: "Third-Party Assurance",
         };
         const financial_assurance_select = document.getElementById("cre6c_financialassurance");
         Object.entries(financial_assurance_options).forEach(([value, label]) => {
@@ -730,7 +728,7 @@
                     reader.onload = function (e) {
                         // The browser has finished reading the file, we can now do something with it...
                         var fileContent = new Uint8Array(e.target.result);
-   
+
                         // Run the function to upload to the Portal Web API, passing the GUID of the newly created record and the file's contents and name as inputs
                         uploadFile(fileContent, fileName, entityID);
                     };
