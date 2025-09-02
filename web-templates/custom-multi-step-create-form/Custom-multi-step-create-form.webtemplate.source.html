@@ -162,6 +162,11 @@
                                 <div id="err_plantname" class="error"></div>
                             </div>
 
+                            <!-- Map overlay loading screen -->
+                            <div id="mapLoading" class="map-loading d-none">
+                                <div class="spinner"></div>
+                                <p>Fetching location...</p>
+                            </div>
                             <!-- Location search + suggestions -->
                             <div class="col-12 col-md-4 positioner">
                                 <label for="cre6c_location" class="form-label">Location (search)</label>
@@ -190,7 +195,7 @@
 
                             <div class="col-12 mt-2">
                                 <div id="map" aria-label="Location map"></div>
-                                <p id="locationMessage" class="mt-2 text-center text-muted">Search above or click on the
+                                <p id="locationMessage" class="mt-2 text-center form-label fs-6">Search above or click on the
                                     map
                                     to select a location.</p>
                             </div>
@@ -585,14 +590,23 @@
         /* ---------- Map & Location Search ---------- */
         let map = L.map('map').setView([39.381266, -97.922211], 4); // USA center-ish
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-        
+
         let marker;
-        
+
         function setMarker(lat, lon) {
             if (marker) map.removeLayer(marker);
             marker = L.marker([lat, lon]).addTo(map);
             map.setView([lat, lon], 13);
         }
+
+        // Map loading overlay controls
+        function showMapLoading() {
+            document.getElementById("mapLoading").classList.remove("d-none");
+        }
+        function hideMapLoading() {
+            document.getElementById("mapLoading").classList.add("d-none");
+        }
+
 
         // Toggle: true = use Power Automate Flow, false = local (direct Nominatim)
         const USE_FLOW = true;
@@ -678,10 +692,15 @@
             $("#cre6c_latitude").value = lat.toFixed(6);
             $("#cre6c_longitude").value = lng.toFixed(6);
 
+            showMapLoading(); // show loading overlay
+            // Get formatted address
             const formatted = await reverseGeocode(lat, lng);
+            hideMapLoading(); // hide loading overlay
+
             $("#cre6c_location").value = formatted;  // always clean address
             $("#locationMessage").textContent = `Location set to: ${formatted}`;
             setMarker(lat, lng);
+            setErr("err_location", "");
         });
 
         // ----- SEARCH WITH SUGGESTIONS -----
@@ -695,9 +714,16 @@
 
         locInput.addEventListener("input", debounce(async () => {
             const q = locInput.value.trim();
-            if (q.length < 3) { suggBox.classList.add("d-none"); suggBox.innerHTML = ""; return; }
+            
+            if (q.length < 9) { suggBox.classList.add("d-none"); suggBox.innerHTML = ""; return; } // start suggestions after 8 chars
+
+            let loadingTimeout = setTimeout(showMapLoading, 200); // 🔹 show after 200ms if still loading
 
             const places = await searchLocations(q);
+            clearTimeout(loadingTimeout);
+            hideMapLoading(); // hide loading overlay
+
+            //
             if (!places?.length) { suggBox.classList.add("d-none"); suggBox.innerHTML = ""; return; }
 
             suggBox.innerHTML = places.map(p =>
@@ -706,7 +732,7 @@
         </div>`
             ).join("");
             suggBox.classList.remove("d-none");
-        }, 400));
+        }, 800));
 
         suggBox.addEventListener("click", e => {
             const item = e.target.closest("div[data-lat]");
