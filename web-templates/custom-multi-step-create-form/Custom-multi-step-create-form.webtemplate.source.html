@@ -38,6 +38,28 @@
 </script>
 
 <div class="container my-4">
+    <!-- All Done Modal -->
+    <div class="modal fade" id="allDoneModal" tabindex="-1" aria-labelledby="allDoneModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center" id="allDoneModalLabel">All done!</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="fs-5">Your submission was successful.</p>
+                    <button type="button" class="btn btn-primary text-light" id="homeBtn">Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Loading Screen Overlay -->
+    <div id="loadingOverlay">
+        <div style="text-align:center;">
+            <div class="spinner-border text-primary" role="status" style="width:3rem; height:3rem;"></div>
+            <div class="mt-3 fs-4 text-dark">Submitting, please wait...</div>
+        </div>
+    </div>
+
     <main class="">
         <div class="mb-4 bg-white">
             <div class="form-header">
@@ -85,7 +107,8 @@
                     <div class="section-content">
                         <div class="row g-3 my-2 px-4">
                             <div class="col-12 col-md-6 col-lg-4">
-                                <label for="cre6c_applicantname" class="form-label required-field">Applicant Name</label>
+                                <label for="cre6c_applicantname" class="form-label required-field">Applicant
+                                    Name</label>
                                 <input type="text" class="form-control" id="cre6c_applicantname" required>
                                 <div id="err_applicantname" class="error"></div>
                             </div>
@@ -95,7 +118,8 @@
                                 <div id="err_applicantemail" class="error"></div>
                             </div>
                             <div class="col-12 col-md-6 col-lg-4">
-                                <label for="cre6c_applicantphone" class="form-label required-field">Applicant Phone</label>
+                                <label for="cre6c_applicantphone" class="form-label required-field">Applicant
+                                    Phone</label>
                                 <input type="tel" class="form-control" id="cre6c_applicantphone" required>
                                 <div id="err_applicantphone" class="error"></div>
                             </div>
@@ -193,12 +217,12 @@
                         <div class="row g-3 my-2 px-4">
                             <div class="col-12 col-md-4">
                                 <label for="cre6c_projectedstartdate" class="form-label">Project Start Date</label>
-                                <input type="date" class="form-control" id="cre6c_projectedstartdate" >
+                                <input type="date" class="form-control" id="cre6c_projectedstartdate">
                                 <div id="err_startdate" class="error"></div>
                             </div>
                             <div class="col-12 col-md-4">
                                 <label for="cre6c_projectedenddate" class="form-label">Project End Date</label>
-                                <input type="date" class="form-control" id="cre6c_projectedenddate" >
+                                <input type="date" class="form-control" id="cre6c_projectedenddate">
                                 <div id="err_enddate" class="error"></div>
                             </div>
                             <div class="col-12">
@@ -220,7 +244,7 @@
                         <div class="row g-3 my-2 px-4">
                             <div class="col-12 col-md-4">
                                 <label for="cre6c_financialassurance" class="form-label">Financial Assurance</label>
-                                <select class="form-select" id="cre6c_financialassurance" >
+                                <select class="form-select" id="cre6c_financialassurance">
                                     <option value="">Select an option</option>
                                 </select>
                                 <div id="err_financialassurance" class="error"></div>
@@ -264,7 +288,7 @@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="terms_yes"
                                         name="cre6c_termsaccepted" value="Yes" required>
-                                    <label class="form-check-label" for="terms_yes">
+                                    <label class="form-check-label required-field" for="terms_yes">
                                         I hereby certify that I have read, understand, and agree to the terms and
                                         conditions relating to Environmental Review Application.
                                     </label>
@@ -272,7 +296,7 @@
                                 <div id="err_terms" class="error"></div>
                             </div>
                             <div class="col-12 col-md-4">
-                                <label for="cre6c_initials" class="form-label">Initials</label>
+                                <label for="cre6c_initials" class="form-label required-field">Initials</label>
                                 <input type="text" class="form-control" id="cre6c_initials" maxlength="4" required>
                                 <div id="err_initials" class="error"></div>
                             </div>
@@ -329,7 +353,8 @@
                             <hr class="my-4">
 
                             <h4 class="mb-3">Acknowledgement</h4>
-                            <p>I hereby certify that I have read, understand, and agree to the terms and conditions relating to Environmental Review Application.</p>
+                            <p>I hereby certify that I have read, understand, and agree to the terms and conditions
+                                relating to Environmental Review Application.</p>
                             <p><strong>Terms Accepted: </strong> <span id="confirm_termsaccepted"></span></p>
                             <p><strong>Initials:</strong> <span id="confirm_initials"></span></p>
 
@@ -349,20 +374,18 @@
                     <button type="button" class="nav-btn btn-next" id="nextBtn">Next <i
                             class="fas fa-chevron-right"></i>
                     </button>
-                    <button type="submit" class="btn btn-light border border-success border-3 border-opacity-50" id="submitBtn" style="display:none;"><i
-                            class="fas fa-paper-plane"></i> Submit Application
+                    <button type="submit" class="btn btn-light border border-success border-3 border-opacity-50"
+                        id="submitBtn" style="display:none;"><i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
                 </div>
             </form>
         </div>
     </main>
 </div>
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        /*Initialize Map*/
-        let map = L.map('map').setView([39.381266, -97.922211], 4); // USA center-ish
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-
         /*---------Setup project end date range----------*/
         const startDateInput = document.getElementById('cre6c_projectedstartdate');
 
@@ -543,7 +566,12 @@
                         conf.textContent = plant_design_options[el.value] || 'N/A';
                     } else if (id === 'cre6c_financialassurance') {
                         conf.textContent = financial_assurance_options[el.value] || 'N/A';
-                    } else {
+                    } else if (id == 'cre6c_projectedstartdate' || id === 'cre6c_projectedenddate') {
+                        const d = new Date(el.value);
+                        const formatted = `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}/${d.getFullYear()}`;
+                        conf.textContent = formatted;
+                    }
+                    else {
                         conf.textContent = (el.value || '').toString() || 'N/A';
                     }
                 }
@@ -555,27 +583,57 @@
         }
 
         /* ---------- Map & Location Search ---------- */
-
+        let map = L.map('map').setView([39.381266, -97.922211], 4); // USA center-ish
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+        
         let marker;
+        
         function setMarker(lat, lon) {
             if (marker) map.removeLayer(marker);
             marker = L.marker([lat, lon]).addTo(map);
             map.setView([lat, lon], 13);
         }
 
-        // Reverse geocode helper (for map clicks)
+        // Toggle: true = use Power Automate Flow, false = local (direct Nominatim)
+        const USE_FLOW = true;
+
+        // Flow URL for production
         const FLOW_GEO_URL = "https://prod-137.westus.logic.azure.com:443/workflows/2c0a2c10de1f40ff8af5584929aa70c7/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=0jf2MWWx2DppTvJxqePK_d5Y6HZmZkVagfUhQaFpyk0";
+
+        // Format address to exclude county
+        function formatAddress(addr) {
+            const { house_number, road, city, town, village, state, postcode, country } = addr;
+            return [
+                [house_number, road].filter(Boolean).join(" "), // e.g. "123 Main St"
+                city || town || village,
+                state,
+                postcode,
+                country
+            ].filter(Boolean).join(", ");
+        }
 
         // ----- FLOW HELPERS -----
         async function reverseGeocode(lat, lon) {
             try {
-                const resp = await fetch(FLOW_GEO_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ mode: "reverse", lat, lon })
-                });
-                const data = await resp.json();
-                return data.display_name || "Selected Location";
+                if (USE_FLOW) {
+                    // Call Power Automate Flow
+                    const resp = await fetch(FLOW_GEO_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ mode: "reverse", lat, lon })
+                    });
+                    const data = await resp.json();
+                    if (data.address) return formatAddress(data.address);
+                    return "Selected Location";
+                } else {
+                    // Direct Nominatim
+                    const resp = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1&countrycodes=us`
+                    );
+                    const data = await resp.json();
+                    if (data.address) return formatAddress(data.address);
+                    return "Selected Location";
+                }
             } catch (e) {
                 console.warn("Reverse geocode failed", e);
                 return "Selected Location";
@@ -584,12 +642,30 @@
 
         async function searchLocations(query) {
             try {
-                const resp = await fetch(FLOW_GEO_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ mode: "search", query })
-                });
-                return await resp.json();
+                if (USE_FLOW) {
+                    const resp = await fetch(FLOW_GEO_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ mode: "search", query })
+                    });
+                    const results = await resp.json();
+
+                    return results.map(r => ({
+                        lat: r.lat,
+                        lon: r.lon,
+                        display: r.address ? formatAddress(r.address) : (r.display_name || "")
+                    }));
+                } else {
+                    const resp = await fetch(
+                        `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}&addressdetails=1&countrycodes=us`
+                    );
+                    const results = await resp.json();
+                    return results.map(r => ({
+                        lat: r.lat,
+                        lon: r.lon,
+                        display: r.address ? formatAddress(r.address) : (r.display_name || "")
+                    }));
+                }
             } catch (e) {
                 console.warn("Search failed", e);
                 return [];
@@ -602,9 +678,9 @@
             $("#cre6c_latitude").value = lat.toFixed(6);
             $("#cre6c_longitude").value = lng.toFixed(6);
 
-            const name = await reverseGeocode(lat, lng);
-            $("#cre6c_location").value = name;
-            $("#locationMessage").textContent = `Location set to: ${name}`;
+            const formatted = await reverseGeocode(lat, lng);
+            $("#cre6c_location").value = formatted;  // always clean address
+            $("#locationMessage").textContent = `Location set to: ${formatted}`;
             setMarker(lat, lng);
         });
 
@@ -625,8 +701,8 @@
             if (!places?.length) { suggBox.classList.add("d-none"); suggBox.innerHTML = ""; return; }
 
             suggBox.innerHTML = places.map(p =>
-                `<div data-lat="${p.lat}" data-lon="${p.lon}" data-display="${p.display_name}">
-            ${p.display_name}
+                `<div data-lat="${p.lat}" data-lon="${p.lon}" data-display="${p.display}">
+            ${p.display}
         </div>`
             ).join("");
             suggBox.classList.remove("d-none");
@@ -637,10 +713,11 @@
             if (!item) return;
             const lat = parseFloat(item.dataset.lat), lon = parseFloat(item.dataset.lon);
 
-            $("#cre6c_location").value = item.dataset.display;
+            $("#cre6c_location").value = item.dataset.display; // always clean address
             $("#cre6c_latitude").value = lat.toFixed(6);
             $("#cre6c_longitude").value = lon.toFixed(6);
             setMarker(lat, lon);
+            $("#locationMessage").textContent = `Location set to: ${item.dataset.display}`;
 
             suggBox.classList.add("d-none");
             suggBox.innerHTML = "";
@@ -653,10 +730,17 @@
             }
         });
 
+        locInput.addEventListener("blur", () => {
+            setTimeout(() => { suggBox.classList.add("d-none"); suggBox.innerHTML = ""; }, 200);
+        });
+
         /* ---------- Submit to Dataverse ---------- */
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             if (!validateStep(currentStep)) return;
+
+            // Show loading overlay
+            document.getElementById('loadingOverlay').style.display = 'flex';
 
             const terms_accepted = document.querySelector('input[name="cre6c_termsaccepted"]:checked');
             const reactor_model = document.getElementById('cre6c_reactormodel').value.trim();
@@ -702,20 +786,18 @@
                 success: function (data, textStatus, xhr) {
                     const newId = xhr.getResponseHeader("entityid");
                     getFileContentsAndMetadata(newId);
-                    done(true, "Record created successfully!");
                 },
                 error: function (xhr) {
                     console.error("Create error", xhr);
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Submit';
+                    // Hide loading overlay
+                    document.getElementById('loadingOverlay').style.display = 'none';
                     alert("There was an error creating the record. Please try again.");
                 }
             });
 
-
             function getFileContentsAndMetadata(entityID) {
-                console.log("New record ID:", entityID);
-                console.log("Getting file contents...");
                 // Get the name of the selected file
                 var fileName = encodeURIComponent(document.getElementById('cre6c_fileupload').files[0].name);
                 // Get the content of the selected file
@@ -736,10 +818,7 @@
                 }
             }
 
-            // Upload the file to
             function uploadFile(fileContent, fileName, newID) {
-                console.log("Uploading file to record ID:", newID);
-                console.log("File COntent", fileContent);
 
                 // Use the safeAjax function to call the Portal Web API to upload the file as a note attachment
                 webapi.safeAjax({
@@ -761,10 +840,21 @@
 
             function done(success, message) {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
 
                 if (success) {
-                    alert(message || "Record created successfully!");
+                    // Hide loading overlay
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    // Show modal instead of alert
+                    var allDoneModal = document.getElementById('allDoneModal');
+                    if (allDoneModal) {
+                        var modal = new bootstrap.Modal(allDoneModal);
+                        modal.show();
+                        document.getElementById('homeBtn').onclick = function () {
+                            window.location.href = '/'; // Change to your home page URL if needed
+                        };
+                    }
+                    // Reset form
                     form.reset();
                     currentStep = 0;
                     completedSteps = new Set();
@@ -779,9 +869,7 @@
         });
 
 
-
         // Initialize first step view
         showStep(currentStep);
     });
-
 </script>
