@@ -4,12 +4,14 @@
     <div class="skip-to-content"><a href="#mainContent">{{ resx.Skip_To_Content | default: "Skip to main content" }}</a></div><div class="header-container  custom-container">
         <div class="navbar-header" style="display: flex;">
             <div class=" d-xs-block d-sm-block d-md-block d-lg-block navbar-brand navbar-header">
-                {% editable snippets 'Mobile Header' type: 'html' %}
+               {% editable snippets 'Mobile Header' type: 'html' %}
             </div>
             <button type="button" class="navbar-toggler collapsed custom-navbar-toggler" title="{{ snippets['Header/Toggle Navigation'] | default: resx['Toggle_Navigation'] | h }}" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false" onclick="setHeight();">
                 <span class="visually-hidden">{{ snippets["Header/Toggle Navigation"] | default: resx['Toggle_Navigation'] | h }}</span>
                 <span class="navbar-toggler-icon"></span>
             </button>
+        </div>
+        <div>{% if snippets['Site name'] %}<h1 class='siteTitle custom-sitetitle'>{{ snippets['Site name'] }}</h1>{% endif %}
         </div>
         <div id="navbar" class="navbar-collapse collapse fit-content" style="width: min-content; flex-basis: 0%; flex-grow: 0;">
             {% if user.roles contains '[Building Permit] C1 - Admin' %}
