@@ -56,31 +56,31 @@
                 <!-- Tab Navigation for the Steps -->
                 <ul class="nav nav-tabs form-nav-tabs mb-4" id="formTabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link fs-6 active" id="tab-1" data-bs-toggle="tab" href="#step-1" data-step="0"
+                        <a class="form-nav-link fs-6 active" id="tab-1" data-bs-toggle="tab" href="#step-1" data-step="0"
                             role="tab" aria-controls="step-1" aria-selected="true">1. Applicant</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-6 disabled" id="tab-2" data-bs-toggle="tab" href="#step-2" data-step="1"
+                        <a class="form-nav-link fs-6 disabled" id="tab-2" data-bs-toggle="tab" href="#step-2" data-step="1"
                             role="tab" aria-controls="step-2" aria-selected="false">2. Project</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-6 disabled" id="tab-3" data-bs-toggle="tab" href="#step-3" data-step="2"
+                        <a class="form-nav-link fs-6 disabled" id="tab-3" data-bs-toggle="tab" href="#step-3" data-step="2"
                             role="tab" aria-controls="step-3" aria-selected="false">3. Schedule</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-6 disabled" id="tab-4" data-bs-toggle="tab" href="#step-4" data-step="3"
+                        <a class="form-nav-link fs-6 disabled" id="tab-4" data-bs-toggle="tab" href="#step-4" data-step="3"
                             role="tab" aria-controls="step-4" aria-selected="false">4. Assurance</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-6 disabled" id="tab-5" data-bs-toggle="tab" href="#step-5" data-step="4"
+                        <a class="form-nav-link fs-6 disabled" id="tab-5" data-bs-toggle="tab" href="#step-5" data-step="4"
                             role="tab" aria-controls="step-5" aria-selected="false">5. Attachment</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-6 disabled" id="tab-6" data-bs-toggle="tab" href="#step-6" data-step="5"
+                        <a class="form-nav-link fs-6 disabled" id="tab-6" data-bs-toggle="tab" href="#step-6" data-step="5"
                             role="tab" aria-controls="step-6" aria-selected="false">6. Acknowledge</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-6 disabled" id="tab-7" data-bs-toggle="tab" href="#step-7" data-step="6"
+                        <a class="form-nav-link fs-6 disabled" id="tab-7" data-bs-toggle="tab" href="#step-7" data-step="6"
                             role="tab" aria-controls="step-7" aria-selected="false">7. Review</a>
                     </li>
                 </ul>
@@ -386,7 +386,7 @@
         /* ---------- Step controls ---------- */
         const form = $('#multiStepForm');
         const formSteps = $$('.form-step');
-        const navTabs = $$('.form-nav-tabs .nav-link');
+        const navTabs = $$('.form-nav-tabs .form-nav-link');
         const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), submitBtn = $('#submitBtn'), cancelBtn = $('#cancelBtn');
         let currentStep = 0;
         let completedSteps = new Set();

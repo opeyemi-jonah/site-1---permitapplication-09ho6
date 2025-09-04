@@ -11,7 +11,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-        <div>{% if snippets['Site name'] %}<h1 class='siteTitle custom-sitetitle'>{{ snippets['Site name'] }}</h1>{% endif %}
+        <div class="header-h1">{% if snippets['Site name'] %}<h1 class='siteTitle custom-sitetitle'>{{ snippets['Site name'] }}</h1>{% endif %}
         </div>
         <div id="navbar" class="navbar-collapse collapse fit-content" style="width: min-content; flex-basis: 0%; flex-grow: 0;">
             {% if user.roles contains '[Building Permit] C1 - Admin' %}

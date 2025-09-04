@@ -1029,7 +1029,7 @@ p,
 }
 .button1:not(.gjs-selected):hover {
   color: #2a2c2e;
-  background-color: #d19c4d;
+  background-color: #d14d4d;
   border-color: #d19c4d;
 }
 .button1:not(.gjs-selected):active,
@@ -1122,13 +1122,21 @@ h1.siteTitle {
 }
 
 .navbar-dark .navbar-nav > li > a:hover {
-  background-color: var(--portalThemeColor4) !important;
-  color: var(--portalThemeOnColor4) !important;
+  background-color: #425e71 !important;
+  color: white !important;
 }
 
 #bp_fileupload {
   background-color: var(--portalThemeColor4);
   color: var(--portalThemeOnColor4);
+}
+
+.custom-nav-color {
+  color: #425e71 !important;
+}
+
+.nav-link-custom:hover {
+  background-color: #425e71 !important;
 }
 
 /* :root {

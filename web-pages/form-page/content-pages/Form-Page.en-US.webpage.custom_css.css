@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #2c5aa0;
+    --primary-color: #425e71;
     --secondary-color: #f8f9fa;
     --accent-color: #28a745;
     --border-color: #dee2e6;
@@ -161,15 +161,17 @@
     cursor: pointer;
 }
 
-.nav-link {
-    color: var(--primary-color) !important
-}
 
 .nav-link.active {
     background-color: var(--primary-color) !important;
     color: white !important;
     font-weight: 500;
 }
+
+.form-nav-link {
+    color: var(--primary-color) !important
+}
+
 
 .form-nav-tabs .nav-link.disabled {
     color: #6c757d !important;
@@ -249,25 +251,35 @@
 }
 
 .map-loading {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  font-family: Arial, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    font-family: Arial, sans-serif;
 }
+
 .map-loading .spinner {
-  width: 50px;
-  height: 50px;
-  border: 6px solid #ddd;
-  border-top: 6px solid #0078d7;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #0078d7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+    100% {
+        transform: rotate(360deg);
+    }
 }
-.d-none { display: none !important; }
+
+.d-none {
+    display: none !important;
+}
