@@ -1,25 +1,172 @@
-{% fetchxml formsQuery %}
-<fetch>
-  <entity name='powerpagecomponent'>
-    <attribute name='name' />
-    <attribute name='powerpagecomponentid' />
-    <attribute name='powerpagesiteid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='[Building Permit] Default - View Permit' />
-      <condition attribute='powerpagesiteid' operator='eq' value='{{website.id}}' />
-      <condition attribute='powerpagecomponenttype' operator='eq' value='15' />
-    </filter>
-  </entity>
-</fetch>
-{% endfetchxml %}
-{% if formsQuery.results and formsQuery.results.entities %}
-  <input type='d-none' value='{{formsQuery.results.entities[0].powerpagecomponentid}}' id='hidden_form_id'>
+{% if user %}
+{% include 'portalwebapihelper' %}
+{% assign current_user = user.emailaddress1 %}
+{% else %}
+{% assign current_user = null %}
 {% endif %}
-<div data-component-theme='portalThemeColor2' class='row sectionBlockLayout text-start' style='display: flex; flex-wrap: wrap; margin: 0px; min-height: 1200px; padding: 8px;'>
-  <div class='container' style='padding: 0px; display: flex; flex-wrap: wrap;'>
-    <div class='col-lg-12 columnBlockLayout' style='flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;'>
-      <h2 style='margin-bottom: 50px;'>My Applications</h2>
-      {% include 'entity_list', key: '[Building Permit] C2 User - View Permits' %}
+
+<!-- Get user email -->
+<div id="user-data" data-user='{{ current_user | jsonify | escape }}'></div>
+
+<div class="permits-container">
+  <div class="permits-header">
+    <h1><i class="fas fa-file-contract"></i> My Permits Dashboard</h1>
+    <p>Track your Environmental Review Applications and their approval status</p>
+  </div>
+
+  <div class="permits-stats">
+    <div class="stat-card">
+      <div class="stat-number" id="totalCount">0</div>
+      <div class="stat-label">Total Applications</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="pendingCount">0</div>
+      <div class="stat-label">Pending Review</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="approvedCount">0</div>
+      <div class="stat-label">Approved</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="deniedCount">0</div>
+      <div class="stat-label">Denied</div>
     </div>
   </div>
+
+  <div class="permits-list">
+    <div class="list-header">
+      <i class="fas fa-list"></i> Your Applications
+      <button class="btn btn-sm btn-light float-end" onclick="loadUserApplications()">
+        <i class="fas fa-sync"></i> Refresh
+      </button>
+    </div>
+    <div id="permitsContainer"></div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="/form-page" class="btn-new-application">
+      <i class="fas fa-plus"></i> Submit New Application
+    </a>
+  </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', loadUserApplications);
+
+  async function loadUserApplications() {
+    const permitsContainer = document.getElementById('permitsContainer');
+    const totalCount = document.getElementById('totalCount');
+    const pendingCount = document.getElementById('pendingCount');
+    const approvedCount = document.getElementById('approvedCount');
+    const deniedCount = document.getElementById('deniedCount');
+
+    // Show skeleton loader while fetching
+    permitsContainer.innerHTML = '<div class="skeleton-item"></div><div class="skeleton-item"></div><div class="skeleton-item"></div>';
+
+    try {
+      const currentUserEmail = document.getElementById('user-data').getAttribute("data-user");
+      console.log(currentUserEmail)
+
+      const fetchXml = `
+      <fetch>
+        <entity name="cre6c_nrc_permits_table">
+          <attribute name="cre6c_applicantname" />
+          <attribute name="createdon" />
+          <attribute name="cre6c_applicationstatus" />
+          <attribute name="cre6c_projectedstartdate" />
+          <attribute name="cre6c_projectedenddate" />
+          <attribute name="cre6c_nrc_permits_tableid" />
+          <filter type="and">
+            <condition attribute="cre6c_submissionby" operator="eq" value="${currentUserEmail}" />
+          </filter>
+          <order attribute="createdon" descending="true" />
+        </entity>
+      </fetch>
+    `;
+
+      const response = await fetch(`/_api/cre6c_nrc_permits_tables?$select=cre6c_applicantname, createdon, cre6c_applicationstatus, cre6c_projectedstartdate, cre6c_projectedenddate, cre6c_plantname, cre6c_location&$filter=cre6c_submissionby eq '${currentUserEmail}'`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const data = await response.json();
+      console.log('DATA--->', data)
+      const applications = data.value;
+
+      // Update stats
+      totalCount.textContent = applications.length;
+      pendingCount.textContent = applications.filter(app => app.cre6c_applicationstatus === 564980000).length;
+      approvedCount.textContent = applications.filter(app => app.cre6c_applicationstatus === 564980001).length;
+      deniedCount.textContent = applications.filter(app => app.cre6c_applicationstatus === 564980002).length;
+
+      // Render applications
+      if (!applications.length) {
+        permitsContainer.innerHTML = `
+        <div class="empty-state text-center">
+          <i class="fas fa-inbox fa-2x mb-2"></i>
+          <h4>No Applications Yet</h4>
+          <p>You haven't submitted any Environmental Review Applications.</p>
+          <a href="/environmental-application" class="btn-new-application mt-2">
+            <i class="fas fa-plus"></i> Submit Your First Application
+          </a>
+        </div>`;
+        return;
+      }
+
+      permitsContainer.innerHTML = applications.map(app => {
+        const statusLabel = getStatusLabel(app.cre6c_applicationstatus);
+        const statusClass = getStatusClass(app.cre6c_applicationstatus);
+        const submissionDate = app.createdon ? new Date(app.createdon).toLocaleDateString() : 'N/A';
+        const startDate = app.cre6c_projectedstartdate ? new Date(app.cre6c_projectedstartdate).toLocaleDateString() : 'Not specified';
+        const endDate = app.cre6c_projectedenddate ? new Date(app.cre6c_projectedenddate).toLocaleDateString() : 'Not specified';
+
+        return `
+        <div class="permit-item" onclick="viewApplication('${app.cre6c_nrc_permits_tableid}')">
+          <div class="permit-info">
+            <h4>${app.cre6c_applicantname || 'Unnamed Application'}</h4>
+            <p><strong>Project Duration:</strong> ${startDate} - ${endDate}</p>
+          </div>
+          <div class="permit-meta">
+            <div class="permit-date">Submitted: ${submissionDate}</div>
+            <span class="status-badge ${statusClass}">${statusLabel}</span>
+          </div>
+        </div>`;
+      }).join('');
+
+    } catch (error) {
+      console.error('Error loading applications:', error);
+      permitsContainer.innerHTML = `
+      <div class="empty-state text-center">
+        <i class="fas fa-exclamation-triangle fa-2x mb-2 text-warning"></i>
+        <h4>Error Loading Applications</h4>
+        <p>There was an error loading your applications. Please try refreshing the page.</p>
+        <button class="btn btn-primary mt-2" onclick="loadUserApplications()">Retry</button>
+      </div>`;
+    }
+  }
+
+  function getStatusLabel(status) {
+    switch (status) {
+      case 564980000: return 'Pending';
+      case 564980001: return 'Approved';
+      case 564980002: return 'Denied';
+      default: return 'Unknown';
+    }
+  }
+
+  function getStatusClass(status) {
+    switch (status) {
+      case 564980000: return 'status-pending';
+      case 564980001: return 'status-approved';
+      case 564980002: return 'status-denied';
+      default: return 'status-unknown';
+    }
+  }
+
+  function viewApplication(id) {
+    window.location.href = `/permit-details?id=${id}`;
+  }
+</script>

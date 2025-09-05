@@ -5,6 +5,7 @@ footer {
   font-size: 16px;
   height: 68px;
 }
+
 footer .footer-bottom {
   background-color: #9e691a;
 }
@@ -365,7 +366,7 @@ footer .footer-bottom {
   color: var(--portalThemeOnColor9);
 }
 
-.snapshot-header-container > h1 {
+.snapshot-header-container>h1 {
   margin-bottom: 50px;
 }
 
@@ -374,7 +375,7 @@ footer .footer-bottom {
     height: 20vw;
   }
 
-  .snapshot-item > h2 {
+  .snapshot-item>h2 {
     font-size: 30px;
   }
 
@@ -386,7 +387,7 @@ footer .footer-bottom {
 }
 
 @media only screen and (max-width: 1400px) {
-  .snapshot-item > h2 {
+  .snapshot-item>h2 {
     font-size: 20px;
     flex-wrap: nowrap;
   }
@@ -399,7 +400,7 @@ footer .footer-bottom {
 }
 
 @media only screen and (max-width: 1000px) {
-  .snapshot-item > h2 {
+  .snapshot-item>h2 {
     font-size: 2rem;
     text-align: center;
   }
@@ -413,7 +414,7 @@ footer .footer-bottom {
     font-size: 2.5rem;
   }
 
-  .snapshot-header-container > h1 {
+  .snapshot-header-container>h1 {
     margin-bottom: 20px;
     font-size: 3rem;
   }
@@ -429,7 +430,7 @@ footer .footer-bottom {
     height: 35vw;
   }
 
-  .snapshot-header-container > h1 {
+  .snapshot-header-container>h1 {
     margin: 0;
   }
 
@@ -537,22 +538,25 @@ footer .footer-bottom {
 .breadcrumb {
   background-color: transparent;
 }
-.breadcrumb > li a {
+
+.breadcrumb>li a {
   color: var(--portalThemeColor1);
 }
-.breadcrumb > li a:hover {
+
+.breadcrumb>li a:hover {
   color: var(--portalThemeColor1);
 }
-.breadcrumb > .active {
+
+.breadcrumb>.active {
   color: #000000;
 }
 
-.nav-tabs > li > a:hover {
+.nav-tabs>li>a:hover {
   background-color: #f2f2f2;
   color: var(--portalThemeColor1);
 }
 
-.nav-tabs > li > a:focus {
+.nav-tabs>li>a:focus {
   background-color: #f2f2f2;
   color: var(--portalThemeColor1);
 }
@@ -571,17 +575,20 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
   border-color: var(--portalThemeColor4);
   background-color: var(--portalThemeColor4);
 }
+
 .btn-default:hover {
   color: var(--portalThemeOnColor4);
   background-color: var(--portalThemeColor4);
   border-color: var(--portalThemeColor4);
 }
+
 .btn-default:active,
 .btn-default.active {
   color: var(--portalThemeOnColor4);
   border-color: #62a365;
   background-color: var(--portalThemeColor4);
 }
+
 .btn-default:active:hover,
 .btn-default:active:focus,
 .btn-default:active.focus,
@@ -592,6 +599,7 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
   background-color: var(--portalThemeColor4);
   border-color: var(--portalThemeColor4);
 }
+
 .btn-default:focus,
 .btn-default.focus {
   color: var(--portalThemeOnColor4);
@@ -612,17 +620,20 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
   border-style: solid;
   background-color: var(--portalThemeColor1);
 }
+
 .btn-primary:hover {
   color: #2a2c2e;
   background-color: #d19c4d;
   border-color: #d19c4d;
 }
+
 .btn-primary:active,
 .btn-primary.active {
   color: #2a2c2e;
   background-color: #d19c4d;
   border-color: #d19c4d;
 }
+
 .btn-primary:active:hover,
 .btn-primary:active:focus,
 .btn-primary:active.focus,
@@ -633,6 +644,7 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
   background-color: #d19c4d;
   border-color: #d19c4d;
 }
+
 .btn-primary:focus,
 .btn-primary.focus {
   color: #2a2c2e;
@@ -651,46 +663,53 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
 .navbar-dark .navbar-toggler {
   border: 1px solid var(--portalThemeColor1);
 }
+
 .navbar-dark .navbar-toggler:hover {
   background-color: #d19c4d;
   border-color: #d19c4d;
 }
+
 .navbar-dark .navbar-toggler:focus {
   border: 1px solid #ffffff;
   background-color: #d19c4d;
 }
+
 .navbar-dark .navbar-toggler .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8, %3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%232A2C2E'  stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
-.navbar-dark .navbar-nav > li > a {
+.navbar-dark .navbar-nav>li>a {
   color: #ffffff;
   font-family: Arial;
   font-weight: 400;
   font-size: 20px;
 }
-.navbar-dark .navbar-nav > li > a:hover {
+
+.navbar-dark .navbar-nav>li>a:hover {
   background-color: var(--portalThemeColor1);
   color: var(--portalThemeOnColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav > li > a:focus {
+
+.navbar-dark .navbar-nav>li>a:focus {
   background-color: var(--portalThemeColor1);
   color: #000000;
   text-decoration: Underline;
 }
 
-.navbar-dark .navbar-nav > .open > a {
+.navbar-dark .navbar-nav>.open>a {
   color: #000000;
   background-color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav > .open > a:hover {
+
+.navbar-dark .navbar-nav>.open>a:hover {
   color: #000000;
   background-color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav > .open > a:focus {
+
+.navbar-dark .navbar-nav>.open>a:focus {
   color: #000000;
   background-color: var(--portalThemeColor1);
   text-decoration: Underline;
@@ -700,31 +719,37 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
   background-color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav .open .dropdown-menu > li > a {
+
+.navbar-dark .navbar-nav .open .dropdown-menu>li>a {
   color: #000000;
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav .open .dropdown-menu > li > a:hover {
+
+.navbar-dark .navbar-nav .open .dropdown-menu>li>a:hover {
   background-color: #000000;
   color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav .open .dropdown-menu > li > a:focus {
+
+.navbar-dark .navbar-nav .open .dropdown-menu>li>a:focus {
   background-color: #000000;
   color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav .open .dropdown-menu > .active > a {
+
+.navbar-dark .navbar-nav .open .dropdown-menu>.active>a {
   background-color: #000000;
   color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav .open .dropdown-menu > .active > a:hover {
+
+.navbar-dark .navbar-nav .open .dropdown-menu>.active>a:hover {
   background-color: #000000;
   color: var(--portalThemeColor1);
   text-decoration: Underline;
 }
-.navbar-dark .navbar-nav .open .dropdown-menu > .active > a:focus {
+
+.navbar-dark .navbar-nav .open .dropdown-menu>.active>a:focus {
   background-color: #000000;
   color: var(--portalThemeColor1);
   text-decoration: Underline;
@@ -734,6 +759,7 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
   background-color: #9bbb9b;
   color: #000000;
 }
+
 .sectionPrimaryColor h1,
 .sectionPrimaryColor h2,
 .sectionPrimaryColor h3,
@@ -744,6 +770,7 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
 .sectionPrimaryColor a {
   color: #000000;
 }
+
 .sectionPrimaryColor .crmEntityFormView h1,
 .sectionPrimaryColor .crmEntityFormView h2,
 .sectionPrimaryColor .crmEntityFormView h3,
@@ -754,6 +781,7 @@ html[dir='ltr'] .crmEntityFormView .actions .btn,
 .sectionPrimaryColor .crmEntityFormView a {
   color: #000000;
 }
+
 .sectionPrimaryColor .entitylist h1,
 .sectionPrimaryColor .entitylist h2,
 .sectionPrimaryColor .entitylist h3,
@@ -772,6 +800,7 @@ a,
   font-weight: 400;
   font-size: 14px;
 }
+
 a:hover,
 a:focus,
 .a:hover,
@@ -779,20 +808,21 @@ a:focus,
   color: #d19c4d;
 }
 
-.open > .btn-default.dropdown-toggle {
+.open>.btn-default.dropdown-toggle {
   color: #2a2c2e;
   background-color: #e6e6e6;
   border-color: var(--portalThemeColor1);
 }
 
-.open > .btn-primary.dropdown-toggle {
+.open>.btn-primary.dropdown-toggle {
   color: #ffffff;
   background-color: var(--portalThemeColor1);
   border-color: var(--portalThemeColor1);
 }
-.open > .btn-primary.dropdown-toggle:hover,
-.open > .btn-primary.dropdown-toggle:focus,
-.open > .btn-primary.dropdown-toggle.focus {
+
+.open>.btn-primary.dropdown-toggle:hover,
+.open>.btn-primary.dropdown-toggle:focus,
+.open>.btn-primary.dropdown-toggle.focus {
   color: #2a2c2e;
   background-color: #d19c4d;
   border-color: #bb8330;
@@ -808,77 +838,28 @@ a:focus,
   border-radius: 10px;
 }
 
-#mainContent
-  > div
-  > div
-  > div
-  > div.permit-tracker-container
-  > div.permit-tracker-table
-  > div
-  > div
-  > div.view-grid
-  > table
-  > tbody
-  > tr
-  > td {
+#mainContent>div>div>div>div.permit-tracker-container>div.permit-tracker-table>div>div>div.view-grid>table>tbody>tr>td {
   font-size: 2.2rem;
   height: 80px;
   align-items: center;
 }
 
-#mainContent
-  > div
-  > div
-  > div
-  > div.permit-tracker-container
-  > div.permit-tracker-table
-  > div
-  > div
-  > div.view-grid
-  > table
-  > thead {
+#mainContent>div>div>div>div.permit-tracker-container>div.permit-tracker-table>div>div>div.view-grid>table>thead {
   height: 56px;
   background-color: var(--portalThemeColor1);
 }
 
-#mainContent
-  > div
-  > div
-  > div
-  > div.permit-tracker-container
-  > div.permit-tracker-table
-  > div
-  > div
-  > div.view-grid
-  > table
-  > thead
-  > tr
-  > th
-  > a {
+#mainContent>div>div>div>div.permit-tracker-container>div.permit-tracker-table>div>div>div.view-grid>table>thead>tr>th>a {
   color: var(--portalThemeColor5);
   font-size: 18px;
 }
 
-#mainContent
-  > div
-  > div
-  > div
-  > div:nth-child(2)
-  > div
-  > div
-  > div
-  > div
-  > div.view-grid
-  > table
-  > thead
-  > tr
-  > th
-  > a {
+#mainContent>div>div>div>div:nth-child(2)>div>div>div>div>div.view-grid>table>thead>tr>th>a {
   font-size: 18px;
   color: #ffffff;
 }
 
-#mainContent > div > div > div > div > div > div > div > div > div.view-grid > table > thead {
+#mainContent>div>div>div>div>div>div>div>div>div.view-grid>table>thead {
   background-color: var(--portalThemeColor1);
 }
 
@@ -886,74 +867,40 @@ a:focus,
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-#mainContent
-  > div
-  > div
-  > div
-  > div:nth-child(2)
-  > div
-  > div
-  > div
-  > div
-  > div.view-grid
-  > table
-  > tbody
-  > tr {
+
+#mainContent>div>div>div>div:nth-child(2)>div>div>div>div>div.view-grid>table>tbody>tr {
   height: 80px;
   font-size: 2.2rem;
 }
 
-#mainContent
-  > div
-  > div
-  > div
-  > div:nth-child(2)
-  > div
-  > div
-  > div
-  > div
-  > div.view-grid
-  > table
-  > tbody
-  > tr
-  > td {
+#mainContent>div>div>div>div:nth-child(2)>div>div>div>div>div.view-grid>table>tbody>tr>td {
   padding-top: 20px;
 }
 
-#mainContent > div > div > div > div.permit-tracker-container > div.permit-tracker-table > div {
+#mainContent>div>div>div>div.permit-tracker-container>div.permit-tracker-table>div {
   width: 100%;
 }
 
-#mainContent
-  > div
-  > div
-  > div
-  > div:nth-child(2)
-  > div
-  > div
-  > div
-  > div
-  > div.view-grid
-  > table
-  > thead
-  > tr
-  > th {
+#mainContent>div>div>div>div:nth-child(2)>div>div>div>div>div.view-grid>table>thead>tr>th {
   padding-bottom: 15px;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) {
+.table-striped>tbody>tr:nth-of-type(odd) {
   background-color: #f7f7f7 !important;
 }
 
-.table-striped > tbody > tr:nth-of-type(even) {
+.table-striped>tbody>tr:nth-of-type(even) {
   background-color: #ffffff;
 }
+
 .static-top.navbar-dark .navbar-brand a {
   color: #ffffff;
 }
+
 .msos-selecteditems-toggle {
   color: #9bbb9b !important;
 }
+
 h1 p {
   font-family: Helvetica;
   font-weight: 400;
@@ -969,6 +916,7 @@ h2 p {
   font-size: 36px;
   color: #2a2c2e;
 }
+
 h3,
 .h3,
 .page_section h3,
@@ -1015,6 +963,7 @@ p,
   font-size: 16px;
   color: #2a2c2e;
 }
+
 .button1 {
   color: #2a2c2e;
   border-radius: 2px;
@@ -1027,21 +976,25 @@ p,
   border-style: solid;
   background-color: var(--portalThemeColor1);
 }
+
 .button1:not(.gjs-selected):hover {
   color: #2a2c2e;
   background-color: #d14d4d;
   border-color: #d19c4d;
 }
+
 .button1:not(.gjs-selected):active,
 .button1.active:not(.gjs-selected) {
   color: #2a2c2e;
   background-color: button1onhoverfillcolor;
 }
+
 .button1:focus,
 .button1.focus {
   color: #2a2c2e;
   background-color: #d19c4d;
 }
+
 .button2 {
   color: var(--portalThemeColor1) !important;
   border-radius: 2px;
@@ -1054,16 +1007,19 @@ p,
   border-style: solid;
   background-color: transparent;
 }
+
 .button2:not(.gjs-selected):hover {
   color: var(--portalThemeOnColor1) !important;
   background-color: var(--portalThemeColor1) !important;
   border-color: var(--portalThemeColor1) !important;
 }
+
 .button2:not(.gjs-selected):active,
 .button2.active:not(.gjs-selected) {
   color: #2a2c2e;
   background-color: var(--portalThemeColor1);
 }
+
 .button2:focus,
 .button2.focus {
   color: #2a2c2e;
@@ -1111,17 +1067,17 @@ h1.siteTitle {
   border-bottom: none;
 }
 
-.view-grid > table > thead > tr > th > a {
+.view-grid>table>thead>tr>th>a {
   color: var(--portalThemeOnColor1);
   font-size: 18px;
 }
 
-.view-grid > table > tbody > tr > td {
+.view-grid>table>tbody>tr>td {
   color: var(--portalThemeOnColor7);
   font-size: 22px;
 }
 
-.navbar-dark .navbar-nav > li > a:hover {
+.navbar-dark .navbar-nav>li>a:hover {
   background-color: #425e71 !important;
   color: white !important;
 }
@@ -1174,4 +1130,31 @@ h1.siteTitle {
 /* for filter icon for build-permit-table*/
 .permit-tracker-table .entitylist-filter-option .input-group {
   align-items: normal;
+}
+
+/* Custom style */
+/* Styles for the hamburger icon lines */
+.hamburger-menu span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #4a5568;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger-menu span:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+/* Styles to make the dropdown menu look better */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
 }

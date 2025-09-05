@@ -1,0 +1,227 @@
+<div class="permits-container">
+  <!-- Header -->
+  <div class="permits-header">
+    <h1><i class="fas fa-file-alt"></i> Application Details</h1>
+    <p>Detailed view of your Environmental Review Application</p>
+  </div>
+
+  <!-- Back Button -->
+  <div class="mb-3">
+    <a href="/my-permits" class="btn btn-outline-primary">
+      <i class="fas fa-arrow-left"></i> Back to My Permits
+    </a>
+  </div>
+
+  <!-- Application Details -->
+  <div id="applicationDetails">
+    <div class="text-center p-5">
+      <i class="fas fa-spinner fa-spin fa-2x"></i>
+      <p class="mt-2">Loading application details...</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const applicationId = urlParams.get("id");
+    if (applicationId) {
+      loadApplicationDetails(applicationId);
+    } else {
+      showError("No application ID provided");
+    }
+  });
+
+  async function loadApplicationDetails(applicationId) {
+    const container = document.getElementById("applicationDetails");
+    try {
+      // Fetch application details
+      const response = await fetch(
+        `/api/data/v9.2/cr_environmentalreviewapplications(${applicationId})`,
+        {
+          headers: {
+            "Accept": "application/json",
+            "OData-MaxVersion": "4.0",
+            "OData-Version": "4.0"
+            // Authorization header is automatically handled in Power Pages
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Application not found or access denied");
+      }
+      const application = await response.json();
+      displayApplicationDetails(application);
+    } catch (error) {
+      console.error("Error loading application:", error);
+      showError("Failed to load application details");
+    }
+  }
+
+  function displayApplicationDetails(app) {
+    const container = document.getElementById("applicationDetails");
+    const statusClass = getStatusClass(app.cr_status);
+
+    container.innerHTML = `
+      <!-- Status Card -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0"><i class="fas fa-info-circle"></i> Application Status</h4>
+          <span class="status-badge ${statusClass}">${app.cr_status || "Pending"}</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Application ID:</strong> ${app.cr_environmentalreviewapplicationid}</p>
+              <p><strong>Submitted:</strong> ${app.cr_submissiondate ? new Date(app.cr_submissiondate).toLocaleDateString() : "Not provided"}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Plant Name:</strong> ${app.cr_plantname || "Not specified"}</p>
+              <p><strong>Location:</strong> ${app.cr_location || "Not specified"}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applicant Information -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0"><i class="fas fa-user"></i> Applicant Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Name:</strong> ${app.cr_applicantname || "Not provided"}</p>
+              <p><strong>Email:</strong> ${app.cr_applicantemailaddress || "Not provided"}</p>
+              <p><strong>Phone:</strong> ${app.cr_applicantphonenumber || "Not provided"}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Primary Contact:</strong> ${app.cr_primarycontactname || "Not provided"}</p>
+              <p><strong>Contact Email:</strong> ${app.cr_primarycontactemail || "Not provided"}</p>
+              <p><strong>Contact Phone:</strong> ${app.cr_primarycontactphone || "Not provided"}</p>
+            </div>
+          </div>
+          ${
+            app.cr_organizationstructure
+              ? `
+            <div class="row mt-3">
+              <div class="col-12">
+                <p><strong>Organization Structure:</strong></p>
+                <p class="bg-light p-3 rounded">${app.cr_organizationstructure}</p>
+              </div>
+            </div>`
+              : ""
+          }
+        </div>
+      </div>
+
+      <!-- Project Details -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0"><i class="fas fa-industry"></i> Project Details</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Plant Design:</strong> ${app.cr_plantdesign || "Not provided"}</p>
+              <p><strong>Reactor Model:</strong> ${app.cr_reactormodel || "Not provided"}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Latitude:</strong> ${app.cr_latitude || "Not provided"}</p>
+              <p><strong>Longitude:</strong> ${app.cr_longitude || "Not provided"}</p>
+            </div>
+          </div>
+          ${
+            app.cr_operatinghistory
+              ? `
+            <div class="row mt-3">
+              <div class="col-12">
+                <p><strong>Operating History:</strong></p>
+                <p class="bg-light p-3 rounded">${app.cr_operatinghistory}</p>
+              </div>
+            </div>`
+              : ""
+          }
+        </div>
+      </div>
+
+      <!-- Schedule & Scope -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0"><i class="fas fa-calendar-alt"></i> Schedule & Scope</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Projected Start Date:</strong> ${app.cr_projectedstartdate ? new Date(app.cr_projectedstartdate).toLocaleDateString() : "Not specified"}</p>
+              <p><strong>Projected End Date:</strong> ${app.cr_projectedenddate ? new Date(app.cr_projectedenddate).toLocaleDateString() : "Not specified"}</p>
+            </div>
+          </div>
+          ${
+            app.cr_modificationdescription
+              ? `
+            <div class="row mt-3">
+              <div class="col-12">
+                <p><strong>Modification Description:</strong></p>
+                <p class="bg-light p-3 rounded">${app.cr_modificationdescription}</p>
+              </div>
+            </div>`
+              : ""
+          }
+        </div>
+      </div>
+
+      <!-- Assurance & Qualifications -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0"><i class="fas fa-shield-alt"></i> Assurance & Qualifications</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Financial Assurance:</strong> ${app.cr_financialassurance || "Not selected"}</p>
+          ${
+            app.cr_experiencequalifications
+              ? `
+            <div class="mt-3">
+              <p><strong>Experience and Qualifications:</strong></p>
+              <p class="bg-light p-3 rounded">${app.cr_experiencequalifications}</p>
+            </div>`
+              : ""
+          }
+        </div>
+      </div>
+
+      <!-- Acknowledgement -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0"><i class="fas fa-check-circle"></i> Acknowledgement</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Initials:</strong> ${app.cr_initials || "Not provided"}</p>
+          <p class="text-muted">Applicant certified agreement to terms and conditions</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function getStatusClass(status) {
+    switch (status?.toLowerCase()) {
+      case "approved": return "status-approved";
+      case "denied": return "status-denied";
+      case "under review": return "status-under-review";
+      default: return "status-pending";
+    }
+  }
+
+  function showError(message) {
+    const container = document.getElementById("applicationDetails");
+    container.innerHTML = `
+      <div class="alert alert-danger text-center">
+        <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+        <h4>Error</h4>
+        <p>${message}</p>
+        <a href="/my-permits" class="btn btn-primary">Return to My Permits</a>
+      </div>
+    `;
+  }
+</script>
