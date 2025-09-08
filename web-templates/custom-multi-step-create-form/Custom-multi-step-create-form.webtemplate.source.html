@@ -284,7 +284,7 @@
                             <div class="col-12">
                                 <label for="cre6c_fileupload" class="form-label">Upload File</label>
                                 <input type="file" class="form-control" id="cre6c_fileupload"
-                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
                                 <div id="err_fileupload" class="error"></div>
                             </div>
                         </div>
@@ -488,6 +488,7 @@
             if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
                 form.reset();
                 window.location.reload();
+                window.location.href = '/';
             }
         }
         cancelBtn.addEventListener('click', handleCancel);
@@ -602,7 +603,7 @@
 
         /* ---------- Map & Location Search ---------- */
         let map = L.map('map').setView([39.381266, -97.922211], 4); // USA center-ish
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, minZoom: 5 }).addTo(map);
 
         let marker;
 
@@ -786,6 +787,11 @@
             const plant_design = parseInt($('#cre6c_plantdesign').value);
             const financial_assurance = parseInt($('#cre6c_financialassurance').value);
 
+            // Check if a file is uploaded
+            const fileInput = $('#cre6c_fileupload');
+            const fileObj = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+            const fileName = fileObj ? encodeURIComponent(fileObj.name) : null;
+
             // Collect all values from the form
             const record = {
                 cre6c_applicantname: $('#cre6c_applicantname').value.trim(),
@@ -809,9 +815,13 @@
                 cre6c_experiencequalifications: $('#cre6c_experiencequalifications').value.trim(),
                 cre6c_termsaccepted: terms_accepted ? (terms_accepted.value === 'Yes') : false,
                 cre6c_initials: $('#cre6c_initials').value.trim(),
-                cre6c_fileupload_name: $('#cre6c_fileupload').files[0] ? encodeURIComponent($('#cre6c_fileupload').files[0].name) : null,
                 cre6c_submissionby: user_email
             };
+
+            // Only add file name if a file is uploaded
+            if (fileName) {
+                record.cre6c_fileupload_name = fileName;
+            }
 
             // Disable submit to prevent double posts
             submitBtn.disabled = true;
@@ -830,7 +840,8 @@
                 error: function (xhr) {
                     console.error("Create error", xhr);
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Submit';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+
                     // Hide loading overlay
                     document.getElementById('loadingOverlay').style.display = 'none';
                     alert("There was an error creating the record. Please try again.");

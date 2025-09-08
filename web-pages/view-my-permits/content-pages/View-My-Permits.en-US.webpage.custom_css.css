@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #2c5aa0;
+    --primary-color: #425e71;
     --secondary-color: #f8f9fa;
     --success-color: #28a745;
     --warning-color: #ffc107;
@@ -53,6 +53,33 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     border-left: 4px solid var(--primary-color);
+}
+
+.stat-card-pending {
+    border-left: 4px solid var(--warning-color) !important;
+}
+
+.stat-card-approved {
+
+    border-left: 4px solid var(--success-color) !important;
+}
+
+.stat-card-denied {
+    border-left: 4px solid var(--danger-color) !important;
+}
+
+.stat-number-pending {
+    color: var(--warning-color) !important;
+
+}
+
+.stat-number-approved {
+    color: var(--success-color) !important;
+}
+
+.stat-number-denied {
+    color: var(--danger-color) !important;
+
 }
 
 .stat-number {
@@ -239,7 +266,7 @@ body {
     }
 }
 
- .env-indicator {
+.env-indicator {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -247,22 +274,27 @@ body {
     border-radius: 4px;
     font-size: 12px;
     font-weight: bold;
-  }
-  .env-dev {
+}
+
+.env-dev {
     background-color: #28a745;
     color: white;
-  }
-  .env-prod {
+}
+
+.env-prod {
     background-color: #dc3545;
     color: white;
-  }
-  .permits-container {
+}
+
+.permits-container {
     position: relative;
-  }
-  .permits-header {
+}
+
+.permits-header {
     position: relative;
-  }
-  .permit-item {
+}
+
+.permit-item {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
@@ -272,58 +304,84 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .permit-item:hover {
-    border-color: #007bff;
+}
+
+.permit-item:hover {
+    border-color: var(--primary-color);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  .permit-info h4 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.permit-info h4 {
     margin: 0 0 8px 0;
     color: #333;
-  }
-  .permit-meta {
+}
+
+.permit-meta {
     text-align: right;
-  }
-  .permit-date {
+}
+
+.permit-date {
     font-size: 14px;
     color: #666;
     margin-bottom: 8px;
-  }
-  .status-badge {
+}
+
+.status-badge {
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
-  }
-  .status-pending { background-color: #fff3cd; color: #856404; }
-  .status-approved { background-color: #d4edda; color: #155724; }
-  .status-denied { background-color: #f8d7da; color: #721c24; }
-  .status-unknown { background-color: #e2e3e5; color: #6c757d; }
-  .permits-stats {
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-denied {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-unknown {
+    background-color: #e2e3e5;
+    color: #6c757d;
+}
+
+.permits-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
-  }
-  .stat-card {
+}
+
+.stat-card {
     background: white;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  .stat-number {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
     font-size: 36px;
     font-weight: bold;
-    color: #007bff;
-  }
-  .stat-label {
+    color: var(--primary-color);
+}
+
+.stat-label {
     color: #666;
     margin-top: 8px;
-  }
-  .list-header {
+}
+
+.list-header {
     background: #f8f9fa;
     padding: 12px 16px;
     border-radius: 8px 8px 0 0;
@@ -332,35 +390,88 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .btn-new-application {
+}
+
+.btn-new-application {
     display: inline-block;
-    background: #007bff;
+    background: var(--primary-color);
     color: white;
     padding: 12px 24px;
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
     transition: background-color 0.2s;
-  }
-  .btn-new-application:hover {
+}
+
+.btn-new-application:hover {
     background: #0056b3;
     color: white;
     text-decoration: none;
-  }
-  .empty-state {
+}
+
+.empty-state {
     padding: 60px 20px;
     color: #6c757d;
-  }
-  .skeleton-item {
+}
+
+.skeleton-item {
     height: 80px;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
     margin-bottom: 12px;
     border-radius: 8px;
-  }
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
+}
+
+/* Page transition */
+.fade-container {
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.fade-container.fade-out {
+    opacity: 0;
+}
+
+/* Pagination controls */
+.pagination-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pagination-controls button {
+    border: none;
+    background: #f0f0f0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    background: #e0e0e0;
+}
+
+.pagination-controls button.active {
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: bold;
+}
+
+.pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
