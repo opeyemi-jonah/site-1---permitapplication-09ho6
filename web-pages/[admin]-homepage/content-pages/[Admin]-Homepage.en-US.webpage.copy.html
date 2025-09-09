@@ -47,3 +47,306 @@
     <div class='col-lg-12 columnBlockLayout' style='flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;'></div>
   </div>
 </div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="~/css/reviewer-dashboard.css" rel="stylesheet">
+
+<div class="reviewer-container">
+  <!-- Header -->
+  <div class="reviewer-header">
+    <h1><i class="fas fa-user-check"></i> Reviewer Dashboard</h1>
+    <p>Review and approve Environmental Review Applications</p>
+  </div>
+  <!-- Statistics -->
+  <div class="review-stats">
+    <div class="stat-card total">
+      <div class="stat-number" id="totalCount">0</div>
+      <div class="stat-label">Total Applications</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="stat-number" id="pendingCount">0</div>
+      <div class="stat-label">Pending Review</div>
+    </div>
+    <div class="stat-card approved">
+      <div class="stat-number" id="approvedCount">0</div>
+      <div class="stat-label">Approved</div>
+    </div>
+    <div class="stat-card denied">
+      <div class="stat-number" id="deniedCount">0</div>
+      <div class="stat-label">Denied</div>
+    </div>
+  </div>
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <div class="row">
+      <div class="col-md-4">
+        <label class="form-label">Filter by Status:</label>
+        <select class="form-control" id="statusFilter" onchange="filterApplications()">
+          <option value="">All Applications</option>
+          <option value="Pending">Pending Review</option>
+          <option value="Approved">Approved</option>
+          <option value="Denied">Denied</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Search:</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="Search by plant name..." onkeyup="filterApplications()">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">&nbsp;</label>
+        <div>
+          <button class="btn-refresh" onclick="refreshData()">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Applications List -->
+  <div class="applications-list">
+    <div class="list-header">
+      <span><i class="fas fa-clipboard-list"></i> All Applications</span>
+      <span id="resultsCount">Loading...</span>
+    </div>
+    <div id="applicationsContainer">
+      <!-- Applications will be loaded here -->
+    </div>
+  </div>
+</div>
+<!-- Review Modal -->
+<div class="review-modal" id="reviewModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Review Application</h3>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Action:</label>
+      <select class="form-control" id="reviewAction" onchange="toggleCommentField()">
+        <option value="">Select Action</option>
+        <option value="Approved">Approve</option>
+        <option value="Denied">Deny</option>
+      </select>
+    </div>
+    <div class="form-group" id="commentGroup" style="display: none;">
+      <label class="form-label">Comments (required for denial):</label>
+      <textarea class="form-control" id="reviewComments" rows="4" placeholder="Please provide reason for denial..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal btn-cancel" onclick="closeReviewModal()">Cancel</button>
+      <button class="btn-modal btn-submit" onclick="submitReview()">Submit Review</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+let allApplications = [];
+let currentApplicationId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadAllApplications();
+});
+
+async function loadAllApplications() {
+  const container = document.getElementById('applicationsContainer');
+  const totalCount = document.getElementById('totalCount');
+  const pendingCount = document.getElementById('pendingCount');
+  const approvedCount = document.getElementById('approvedCount');
+  const deniedCount = document.getElementById('deniedCount');
+  const resultsCount = document.getElementById('resultsCount');
+  try {
+    // Show loading state
+    container.innerHTML = '<div class="text-center p-4"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Loading applications...</p></div>';
+    resultsCount.textContent = 'Loading...';
+    // Fetch all applications from Dataverse
+    const response = await fetch('/api/data/v9.2/cre6c_nrc_permits_tables?$orderby=cr_submissiondate desc');
+    if (!response.ok) {
+      throw new Error('Failed to fetch applications');
+    }
+    const data = await response.json();
+    allApplications = data.value;
+    // Update statistics
+    totalCount.textContent = allApplications.length;
+    pendingCount.textContent = allApplications.filter(app => app.cr_status === 'Pending').length;
+    approvedCount.textContent = allApplications.filter(app => app.cr_status === 'Approved').length;
+    deniedCount.textContent = allApplications.filter(app => app.cr_status === 'Denied').length;
+    // Display applications
+    displayApplications(allApplications);
+  } catch (error) {
+    console.error('Error loading applications:', error);
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-exclamation-triangle text-warning"></i>
+        <h4>Error Loading Applications</h4>
+        <p>There was an error loading the applications. Please try refreshing the page.</p>
+      </div>
+    `;
+    resultsCount.textContent = 'Error';
+  }
+}
+
+function displayApplications(applications) {
+  const container = document.getElementById('applicationsContainer');
+  const resultsCount = document.getElementById('resultsCount');
+  resultsCount.textContent = `${applications.length} applications`;
+  if (applications.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <h4>No Applications Found</h4>
+        <p>No applications match your current filters.</p>
+      </div>
+    `;
+    return;
+  }
+  let html = '';
+  applications.forEach(app => {
+    const statusClass = getStatusClass(app.cr_status);
+    const submissionDate = new Date(app.cr_submissiondate).toLocaleDateString();
+    const startDate = app.cr_projectedstartdate ? new Date(app.cr_projectedstartdate).toLocaleDateString() : 'Not specified';
+    const endDate = app.cr_projectedenddate ? new Date(app.cr_projectedenddate).toLocaleDateString() : 'Not specified';
+    const reviewDate = app.cr_reviewdate ? new Date(app.cr_reviewdate).toLocaleDateString() : '';
+    html += `
+      <div class="application-item">
+        <div class="app-header">
+          <div class="app-info">
+            <h4>${app.cr_plantname || 'Unnamed Plant'}</h4>
+            <p><strong>Applicant:</strong> ${app.cr_applicantname || 'Not specified'}</p>
+            <p><strong>Location:</strong> ${app.cr_location || 'Not specified'}</p>
+            <p><strong>Project Duration:</strong> ${startDate} - ${endDate}</p>
+            ${app.cr_reviewercomments ? `<p><strong>Review Comments:</strong> ${app.cr_reviewercomments}</p>` : ''}
+          </div>
+          <div class="app-meta">
+            <div class="app-date">Submitted: ${submissionDate}</div>
+            ${reviewDate ? `<div class="app-date">Reviewed: ${reviewDate}</div>` : ''}
+            <span class="status-badge ${statusClass}">${app.cr_status || 'Pending'}</span>
+            <div class="action-buttons">
+              <button class="btn-review btn-view" onclick="viewApplication('${app.cr_environmentalreviewapplicationid}')">
+                <i class="fas fa-eye"></i> View Details
+              </button>
+              ${app.cr_status === 'Pending' ? `
+                <button class="btn-review btn-approve" onclick="openReviewModal('${app.cr_environmentalreviewapplicationid}', 'Approved')">
+                  <i class="fas fa-check"></i> Approve
+                </button>
+                <button class="btn-review btn-deny" onclick="openReviewModal('${app.cr_environmentalreviewapplicationid}', 'Denied')">
+                  <i class="fas fa-times"></i> Deny
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function filterApplications() {
+  const statusFilter = document.getElementById('statusFilter').value;
+  const searchInput = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = allApplications;
+  // Filter by status
+  if (statusFilter) {
+    filtered = filtered.filter(app => app.cr_status === statusFilter);
+  }
+  // Filter by search term (plant name only)
+  if (searchInput) {
+    filtered = filtered.filter(app =>
+      (app.cr_plantname || '').toLowerCase().includes(searchInput)
+    );
+  }
+  displayApplications(filtered);
+}
+
+function getStatusClass(status) {
+  switch(status?.toLowerCase()) {
+    case 'approved': return 'status-approved';
+    case 'denied': return 'status-denied';
+    default: return 'status-pending';
+  }
+}
+
+function viewApplication(applicationId) {
+  window.location.href = `/reviewer-details?id=${applicationId}`;
+}
+
+function openReviewModal(applicationId, suggestedAction) {
+  currentApplicationId = applicationId;
+  const modal = document.getElementById('reviewModal');
+  const actionSelect = document.getElementById('reviewAction');
+  const commentsField = document.getElementById('reviewComments');
+  // Reset form
+  actionSelect.value = suggestedAction || '';
+  commentsField.value = '';
+  toggleCommentField();
+  modal.classList.add('show');
+}
+
+function closeReviewModal() {
+  const modal = document.getElementById('reviewModal');
+  modal.classList.remove('show');
+  currentApplicationId = null;
+}
+
+function toggleCommentField() {
+  const action = document.getElementById('reviewAction').value;
+  const commentGroup = document.getElementById('commentGroup');
+  if (action === 'Denied') {
+    commentGroup.style.display = 'block';
+  } else {
+    commentGroup.style.display = 'none';
+  }
+}
+
+async function submitReview() {
+  const action = document.getElementById('reviewAction').value;
+  const comments = document.getElementById('reviewComments').value;
+  if (!action) {
+    alert('Please select an action (Approve or Deny)');
+    return;
+  }
+  if (action === 'Denied' && !comments.trim()) {
+    alert('Comments are required when denying an application');
+    return;
+  }
+  try {
+    const updateData = {
+      'cr_status': action,
+      'cr_reviewdate': new Date().toISOString(),
+      'cr_reviewedby@odata.bind': '/systemusers({{ user.id }})'
+    };
+    if (action === 'Denied') {
+      updateData['cr_reviewercomments'] = comments;
+    }
+    const response = await fetch(`/api/data/v9.2/cre6c_nrc_permits_tables(${currentApplicationId})`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateData)
+    });
+    if (response.ok) {
+      alert(`Application ${action.toLowerCase()} successfully!`);
+      closeReviewModal();
+      loadAllApplications(); // Refresh the list
+    } else {
+      throw new Error('Failed to update application');
+    }
+  } catch (error) {
+    console.error('Error updating application:', error);
+    alert('There was an error updating the application. Please try again.');
+  }
+}
+
+function refreshData() {
+  loadAllApplications();
+}
+
+// Close modal when clicking outside
+document.getElementById('reviewModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeReviewModal();
+  }
+});
+</script>
