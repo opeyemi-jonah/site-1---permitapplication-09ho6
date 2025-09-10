@@ -7,6 +7,12 @@
     --border-color: #dee2e6;
 }
 
+.primary-bg-color {
+    background-color: var(--primary-color);
+}
+div#permitDetailsModalBody p {
+    font-size: 16px;
+}
 body {
     background-color: #f5f7fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,14 +106,6 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-}
-
-.list-header {
-    background: var(--primary-color);
-    color: white;
-    padding: 20px 25px;
-    font-size: 1.3rem;
-    font-weight: 500;
 }
 
 .permit-item {
@@ -382,7 +380,7 @@ body {
 }
 
 .list-header {
-    background: #f8f9fa;
+    background: var(--primary-color);
     padding: 12px 16px;
     border-radius: 8px 8px 0 0;
     border-bottom: 2px solid #e9ecef;
@@ -390,6 +388,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: white;
+    padding: 20px 25px;
+    font-size: 1.3rem;
+    font-weight: 500;
 }
 
 .btn-new-application {
@@ -435,7 +437,7 @@ body {
 
 /* Pagination controls */
 .pagination-controls {
-    margin-top: 20px;
+    margin-top: 20px 0px;
     display: flex;
     justify-content: center;
     gap: 6px;
